@@ -59,18 +59,18 @@ from .models import (
 )
 
 from .serializers import (
-    TrainerSerializer,
+    # TrainerSerializer,
     BatchSerializer,
     AttendanceSerializer,
     SyllabusLogSerializer
 )
 
 
-class TrainerViewSet(viewsets.ModelViewSet):
+# class TrainerViewSet(viewsets.ModelViewSet):
 
-    queryset = Trainer.objects.all()
+#     queryset = Trainer.objects.all()
 
-    serializer_class = TrainerSerializer
+#     serializer_class = TrainerSerializer
 
 
 class BatchViewSet(viewsets.ModelViewSet):
@@ -87,6 +87,14 @@ class BatchViewSet(viewsets.ModelViewSet):
         'trainer__trainer_name',
         'course__course_name'
     ]
+
+    def create(self, validated_data):
+        print("VALIDATED DATA:", validated_data)
+        return super().create(validated_data)
+
+    def create(self, request, *args, **kwargs):
+        print(request.data)
+        return super().create(request, *args, **kwargs)
 
 def get_batches_by_course(request):
     course_id = request.GET.get('course_id')
@@ -195,7 +203,7 @@ class AttendanceSubmitAPIView(APIView):
                         "remarks",
                         ""
                     ),
-                    "trainer": batch.trainer
+                    "trainer": batch.staff
                 }
             )
 
@@ -203,7 +211,7 @@ class AttendanceSubmitAPIView(APIView):
 
             batch=batch,
 
-            trainer=batch.trainer,
+            trainer=batch.staff,
 
             topic_covered=syllabus_data[
                 "topic_covered"
@@ -263,11 +271,12 @@ def dashboard_api(request):
 
     if search:
         batches = batches.filter(
-            Q(batch_name__icontains=search) |
-            Q(course__course_name__istartswith=search) |
-            Q(trainer__trainer_name__icontains=search) |
-            Q(timing__icontains=search)
-        )
+        Q(batch_name__icontains=search) |
+        Q(course__course_name__icontains=search) |
+        Q(trainer__first_name__icontains=search) |
+        Q(trainer__last_name__icontains=search) |
+        Q(timing__icontains=search)
+    )
 
     enrollments = Enrollment.objects.filter(batch__in=batches)
 
@@ -285,7 +294,7 @@ def dashboard_api(request):
             batch_details.append({
             "course": batch.course.course_name,
             "batch": batch.batch_name,
-            "trainer": batch.trainer.trainer_name if batch.trainer else "Not Assigned",
+            "trainer": (f"{batch.trainer.first_name} {batch.trainer.last_name}"if batch.trainer else "Not Assigned"),
             "timing": f"{batch.start_time.strftime('%I:%M %p')} - {batch.end_time.strftime('%I:%M %p')}",
             "session": batch.timing,
         })
@@ -310,7 +319,8 @@ def dashboard(request):
         batches = batches.filter(
             Q(batch_name__icontains=search) |
             Q(course__course_name__icontains=search) |
-            Q(trainer__trainer_name__icontains=search) |
+            Q(trainer__first_name__icontains=search) |
+            Q(trainer__last_name__icontains=search) |
             Q(timing__icontains=search)
         )
 
@@ -447,7 +457,7 @@ def dashboard(request):
             batch_details.append({
                 "course": batch.course.course_name,
                 "batch": batch.batch_name,
-                "trainer": batch.trainer.trainer_name if batch.trainer else "Not Assigned",
+                "trainer": (f"{batch.trainer.first_name} {batch.trainer.last_name}"if batch.trainer else "Not Assigned"),
                 "timing": f"{batch.start_time.strftime('%I:%M %p')} - {batch.end_time.strftime('%I:%M %p')}"
             })
         
@@ -1765,6 +1775,11 @@ def reports(request):
     latest_attendance = Attendance.objects.order_by(
         '-attendance_date'
     ).first()
+
+    latest_attendance_date = None
+
+    if latest_attendance:
+        latest_attendance_date = latest_attendance.attendance_date
     
     attendance_date = ""
     
@@ -2198,28 +2213,28 @@ def reports(request):
         present_count = Attendance.objects.filter(
             enrollment_id__in=filtered_enrollment_ids,
             batch=batch,
-            attendance_date=latest_attendance.attendance_date,
+            attendance_date=latest_attendance_date,
             status="Present"
         ).count()
         
         absent_count = Attendance.objects.filter(
             enrollment_id__in=filtered_enrollment_ids,
             batch=batch,
-            attendance_date=latest_attendance.attendance_date,
+            attendance_date=latest_attendance_date,
             status="Absent"
         ).count()
         
         late_count = Attendance.objects.filter(
             enrollment_id__in=filtered_enrollment_ids,
             batch=batch,
-            attendance_date=latest_attendance.attendance_date,
+            attendance_date=latest_attendance_date,
             status="Late"
         ).count()
 
         total_count = Attendance.objects.filter(
             enrollment_id__in=filtered_enrollment_ids,
             batch=batch,
-            attendance_date=latest_attendance.attendance_date
+            attendance_date=latest_attendance_date
         ).count()
 
        # percentage = round(

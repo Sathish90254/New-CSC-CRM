@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.db.models import Q
+from csc_crm.apps.staff.models import Staff
 
 # from apps.admissions.models import (
 #     Course,
@@ -72,12 +73,14 @@ class Batch(models.Model):
     )
 
     trainer = models.ForeignKey(
-        'Trainer',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True
-    )
-
+    Staff,
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    limit_choices_to={
+        "role__role_name": "Trainer"
+    }
+)
     timing = models.CharField(
         max_length=20,
         choices=TIMING_CHOICES
@@ -203,12 +206,14 @@ class Attendance(models.Model):
     )
 
     trainer = models.ForeignKey(
-        Trainer,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True
-    )
-
+    Staff,
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    limit_choices_to={
+        "role__role_name": "Trainer"
+    }
+)
 
     status = models.CharField(
         max_length=10,
@@ -280,12 +285,15 @@ class SyllabusLog(models.Model):
     )
 
     trainer = models.ForeignKey(
-        'Trainer',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='syllabus_logs'
-    )
+    Staff,
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name='syllabus_logs',
+    limit_choices_to={
+        "role__role_name": "Trainer"
+    }
+)
 
     date = models.DateField(
         default=timezone.now

@@ -9,11 +9,11 @@ from .models import (
 )
 
 
-class TrainerSerializer(serializers.ModelSerializer):
+# class TrainerSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model = Trainer
-        fields = '__all__'
+#     class Meta:
+#         model = Trainer
+#         fields = '__all__'
 
 
 class BatchSerializer(serializers.ModelSerializer):
@@ -98,7 +98,10 @@ class BatchSerializer(serializers.ModelSerializer):
 
     def get_trainer_name(self, obj):
 
-        return obj.trainer.trainer_name if obj.trainer else None
+        if obj.trainer:
+            return f"{obj.trainer.first_name} {obj.trainer.last_name}"
+
+        return None
 
     def get_is_marked(self, obj):
 

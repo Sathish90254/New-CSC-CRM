@@ -1,5 +1,6 @@
 from django import forms
 from .models import Batch
+from csc_crm.apps.staff.models import Staff
 
 class BatchForm(forms.ModelForm):
 
@@ -57,5 +58,11 @@ class BatchForm(forms.ModelForm):
                 'class': 'form-select',
             }),
         }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
+        self.fields['trainer'].queryset = Staff.objects.filter(
+            role__role_name="Trainer",
+            status="active"
+        ).order_by("first_name")
         
