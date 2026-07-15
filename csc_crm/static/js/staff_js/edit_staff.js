@@ -538,12 +538,12 @@ document.addEventListener('DOMContentLoaded', () => {
         'Manager': 'Management',
         'HR': 'Management',
 
-        'BDE': 'Sales Department',
-        'Telecall': 'Sales Department',
         'Sales Exec': 'Sales Department',
+        'Sales Exec Lead': 'Sales Department',
 
         'Digital Marketing': 'Marketing',
-        'Content Creator': 'Marketing'
+        'Content Creator': 'Marketing',
+        'Marketing Lead': 'Marketing',
     };
 
     function autoSelectDepartment() {
@@ -723,9 +723,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const rolesNeedMonthlyTarget = [
         'manager',
-        'bde',
-        'telecall',
-        'sales exec'
+        'sales exec',
+        'sales exec lead'
     ];
 
     // Match this with your models.py

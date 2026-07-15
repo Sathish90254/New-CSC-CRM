@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
 from django.db.models.functions import TruncMonth
-from django.db.models import Q, Sum, Avg, Count
+from django.db.models import Q, Sum, Avg, Count, F, FloatField, ExpressionWrapper
 from django.http import JsonResponse, HttpResponse
 from django.core.paginator import Paginator
 from datetime import datetime
@@ -15,6 +15,8 @@ from openpyxl import Workbook
 import csv
 import re
 from csc_crm.apps.leads.models import *
+from csc_crm.apps.admissions.models import *
+from csc_crm.apps.student_attendance.models import *
 from .models import *
 from .forms import *
 
@@ -1040,6 +1042,8 @@ def update_document_status(request, doc_id):
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                 return JsonResponse({'success': True, 'status': new_status})
     return redirect('staff_documents', staff_id=doc.staff.id)
+
+    
 # ================================ Dashboard View ===================================
 
 def staff_dashboard(request):
@@ -1101,6 +1105,48 @@ def staff_dashboard(request):
     enrolled_leads = LeadCapture.objects.filter(initial_status = 'enrolled').count()
 
     lost_leads = LeadCapture.objects.filter(initial_status = 'lost').count()
+
+    # ==========================================
+    # Lead Percentage Calculation
+    # ==========================================
+
+    if total_leads > 0:
+
+        new_leads_pct = round((new_leads / total_leads) * 100, 1)
+
+        contacted_leads_pct = round((contacted_leads / total_leads) * 100, 1)
+
+        interested_leads_pct = round((interested_leads / total_leads) * 100, 1)
+
+        demo_leads_pct = round((demo_leads / total_leads) * 100, 1)
+
+        enrolled_leads_pct = round((enrolled_leads / total_leads) * 100, 1)
+
+        lost_leads_pct = round((lost_leads / total_leads) * 100, 1)
+
+    else:
+
+        new_leads_pct = 0
+        contacted_leads_pct = 0
+        interested_leads_pct = 0
+        demo_leads_pct = 0
+        enrolled_leads_pct = 0
+        lost_leads_pct = 0
+
+
+    # ==========================================
+    # Lead Donut Degrees
+    # ==========================================
+
+    new_leads_deg = new_leads_pct * 3.6
+
+    contacted_leads_deg = new_leads_deg + (contacted_leads_pct * 3.6)
+
+    interested_leads_deg = contacted_leads_deg + (interested_leads_pct * 3.6)
+
+    demo_leads_deg = interested_leads_deg + (demo_leads_pct * 3.6)
+
+    enrolled_leads_deg = demo_leads_deg + (enrolled_leads_pct * 3.6)
 
 # ================================ 
 # CONVERSION RATE 
@@ -1178,7 +1224,84 @@ def staff_dashboard(request):
         total_leads = Count('id')
     ).order_by('-total_leads')
 
+    # ================================
+    # Student Dashboard
+    # ================================
+
+    total_students = Student.objects.count()
+
+    active_students = Enrollment.objects.filter(batch__status = 'Ongoing').count()
+
+    completed_students = Enrollment.objects.filter(batch__status='Completed').count()
+
+    dropped_students = Admission.objects.filter(status = 'dropped').count()
+
+    recent_students = Student.objects.order_by('-id')[:5]
+
+    # ==========================================
+    # Student Percentage
+    # ==========================================
+
+    if total_students > 0:
+
+        active_students_pct = round(
+            (active_students / total_students) * 100, 1
+        )
+
+        completed_students_pct = round(
+            (completed_students / total_students) * 100, 1
+        )
+
+        dropped_students_pct = round(
+            (dropped_students / total_students) * 100, 1
+        )
+
+    else:
+
+        active_students_pct = 0
+        completed_students_pct = 0
+        dropped_students_pct = 0
+
+    active_students_deg = active_students_pct * 3.6
+
+    completed_students_deg = (
+        active_students_deg +
+        (completed_students_pct * 3.6)
+    )
+
+    dropped_students_deg = (
+        completed_students_deg +
+        (dropped_students_pct * 3.6)
+    )
+
+
+    # ================================
+    # Batch Dashboard
+    # ================================
+
+    total_batches = Batch.objects.count()
+
+    ongoing_batches = Batch.objects.filter(status = 'Ongoing').count()
+
+    upcoming_batches = Batch.objects.filter(status = 'Upcoming').count()
+
+    completed_batches = Batch.objects.filter(status = 'Completed').count()
+
+    batch_summary = Batch.objects.select_related(
+    'course',
+    'trainer'
+    ).annotate(
+    enrolled_students=Count('enrollments'),
+    occupancy_percentage=ExpressionWrapper(
+        Count('enrollments') * 100.0 / F('max_students'),
+        output_field=FloatField()
+    )
+    ).order_by('-enrolled_students', 'batch_name')
+
     context = {
+
+        # Staff Module
+
         'total_staff' : total_staff,
         'active_staff' : active_staff,
         'on_leave' : on_leave,
@@ -1213,6 +1336,42 @@ def staff_dashboard(request):
         'lead_sources': lead_sources,
         'course_interseted': course_interseted,
         'assigned_staff': assigned_staff,
+        'new_leads_pct': new_leads_pct,
+        'contacted_leads_pct': contacted_leads_pct,
+        'interested_leads_pct': interested_leads_pct,
+        'demo_leads_pct': demo_leads_pct,
+        'enrolled_leads_pct': enrolled_leads_pct,
+        'lost_leads_pct': lost_leads_pct,
+
+        'new_leads_deg': new_leads_deg,
+        'contacted_leads_deg': contacted_leads_deg,
+        'interested_leads_deg': interested_leads_deg,
+        'demo_leads_deg': demo_leads_deg,
+        'enrolled_leads_deg': enrolled_leads_deg,
+
+        # Student Module
+
+        'total_students': total_students,
+        'active_students': active_students,
+        'completed_students': completed_students,
+        'dropped_students': dropped_students,
+        'recent_students': recent_students,
+
+        'active_students_pct': active_students_pct,
+        'completed_students_pct': completed_students_pct,
+        'dropped_students_pct': dropped_students_pct,
+
+        'active_students_deg': active_students_deg,
+        'completed_students_deg': completed_students_deg,
+        'dropped_students_deg': dropped_students_deg,
+
+        # Batch Module
+
+        'total_batches': total_batches,
+        'ongoing_batches': ongoing_batches,
+        'upcoming_batches': upcoming_batches,
+        'completed_batches': completed_batches,
+        'batch_summary': batch_summary,
     }
     return render( request, 'staff/dashboard.html', context)
 

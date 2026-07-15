@@ -29,6 +29,29 @@
     <button class="att-nav-toggle" id="attnavToggle">
             <i class="fas fa-bars"></i>
         </button>
+
+        <!-- Hamburger -->
+
+<nav class="att-nav-tabs" id="attnavTabs">
+
+    <a href="{% url 'overview' staff.id %}" class="att-nav-tab-link {% if request.resolver_match.url_name == 'overview' %}active-att-nav-tab{% endif %}">
+        Overview
+    </a>
+
+    <a href="{% url 'attendance' staff.id %}"class="att-nav-tab-link {% if request.resolver_match.url_name == 'attendance' %} active-att-nav-tab{% endif %}">
+    Attendance
+    </a>
+
+    <a href="{% url 'staff_documents' staff.id %}" class="att-nav-tab-link">
+        Documents
+    </a>
+
+    <a href="#" class="att-nav-tab-link">
+        Activity Logs
+    </a>
+
+
+</nav>
     
     <h1>Attendance</h1>
 
@@ -76,28 +99,7 @@
 
 
 
-<!-- Hamburger -->
 
-<nav class="att-nav-tabs" id="attnavTabs">
-
-    <a href="{% url 'overview' staff.id %}" class="att-nav-tab-link {% if request.resolver_match.url_name == 'overview' %}active-att-nav-tab{% endif %}">
-        Overview
-    </a>
-
-    <a href="{% url 'attendance' staff.id %}"class="att-nav-tab-link {% if request.resolver_match.url_name == 'attendance' %} active-att-nav-tab{% endif %}">
-    Attendance
-    </a>
-
-    <a href="{% url 'staff_documents' staff.id %}" class="att-nav-tab-link">
-        Documents
-    </a>
-
-    <a href="#" class="att-nav-tab-link">
-        Activity Logs
-    </a>
-
-
-</nav>
 
     
 <!-- ===== PROFILE ===== -->

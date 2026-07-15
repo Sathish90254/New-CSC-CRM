@@ -34,12 +34,11 @@ class StaffRole(models.Model):
         ('Admin', 'Admin'),
         ('Manager', 'Manager'),
         ('HR', 'HR'),
-        ('BDE', 'BDE'),
-        ('Telecall', 'Telecall'),
         ('Sales Exec', 'Sales Exec'),
+        ('Sales Exec Lead', 'Sales Exec Lead'),
         ('Digital Marketing', 'Digital Marketing'),
         ('Content Creator', 'Content Creator'),
-
+        ('Marketing Lead', 'Marketing Lead'),
     ]
 
     role_name = models.CharField(max_length=100, unique=True, choices=ROLE_CHOICES)

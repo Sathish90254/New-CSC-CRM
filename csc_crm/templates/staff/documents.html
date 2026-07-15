@@ -13,6 +13,29 @@
             <button class="doc-nav-toggle" id="docnavToggle">
                      <i class="fas fa-bars"></i>
                  </button>
+            
+                  <!-- Hamburger -->
+
+<nav class="doc-nav-tabs" id="docnavTabs">
+
+    <a href="{% url 'overview' staff.id %}" class="doc-nav-tab-link {% if request.resolver_match.url_name == 'overview' %}active-doc-nav-tab{% endif %}">
+        Overview
+    </a>
+
+    <a href="{% url 'attendance' staff.id %}"class="doc-nav-tab-link {% if request.resolver_match.url_name == 'attendance' %} active-doc-nav-tab{% endif %}">
+    Attendance
+    </a>
+
+    <a href="{% url 'staff_documents' staff.id %}" class="doc-nav-tab-link {% if request.resolver_match.url_name == 'staff_documents' %}active-doc-nav-tab{% endif %}">
+    Documents
+    </a>
+
+    <a href="#" class="doc-nav-tab-link">
+        Activity Logs
+    </a>
+
+
+</nav>      
             <div>
                 <h1> Document Vault</h1>
                 <p>Upload, view and manage staff documents</p>
@@ -38,28 +61,7 @@
     </div>
     {% endif %}
 
-    <!-- Hamburger -->
-
-<nav class="doc-nav-tabs" id="docnavTabs">
-
-    <a href="{% url 'overview' staff.id %}" class="doc-nav-tab-link {% if request.resolver_match.url_name == 'overview' %}active-doc-nav-tab{% endif %}">
-        Overview
-    </a>
-
-    <a href="{% url 'attendance' staff.id %}"class="doc-nav-tab-link {% if request.resolver_match.url_name == 'attendance' %} active-doc-nav-tab{% endif %}">
-    Attendance
-    </a>
-
-    <a href="{% url 'staff_documents' staff.id %}" class="doc-nav-tab-link {% if request.resolver_match.url_name == 'staff_documents' %}active-doc-nav-tab{% endif %}">
-    Documents
-    </a>
-
-    <a href="#" class="doc-nav-tab-link">
-        Activity Logs
-    </a>
-
-
-</nav>
+  
 
     <!-- ===== PROFILE ===== -->
 {% if staff.role.role_name == "BDE" or staff.role.role_name == "Telecall" or staff.role.role_name == "Sales Exec" or staff.role.role_name == "Manager" or staff.role.role_name == "Digital Marketing" or staff.role.role_name == "Content Creator" or staff.role.role_name == "HR" or staff.role.role_name == "Trainer" or staff.role.role_name == "Developer" %}

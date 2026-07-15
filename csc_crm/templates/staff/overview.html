@@ -29,17 +29,7 @@
             <p>Staff Performance Dashboard</p>
         </div>
 
-    </div>
-
-    <div class="over-header-buttons">
-        <a href="{% url 'edit_staff' staff.id %}" class="over-edit-btn">Edit</a>
-        <a href="{% url 'staff_management' %}" class="over-back-btn">
-            Back
-        </a>
-    </div>
-
-</div>
-
+        
 <!-- Navbar -->
 <nav class="nav-tabs" id="navTabs">
 
@@ -62,6 +52,18 @@
     <a href="{% url 'staff_export' staff.id %}" class="over-export-btn">Export</a>
 
 </nav>
+
+
+    </div>
+
+    <div class="over-header-buttons">
+        <a href="{% url 'edit_staff' staff.id %}" class="over-edit-btn">Edit</a>
+        <a href="{% url 'staff_management' %}" class="over-back-btn">
+            Back
+        </a>
+    </div>
+
+</div>
 
 <!-- ===== PROFILE ===== -->
  {% if staff.role.role_name == "BDE" or staff.role.role_name == "Telecall" or staff.role.role_name == "Sales Exec" or staff.role.role_name == "Manager" or staff.role.role_name == "Digital Marketing" or staff.role.role_name == "Content Creator" or staff.role.role_name == "HR" or staff.role.role_name == "Trainer" or staff.role.role_name == "Developer" %}

@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
         isOpen = !isOpen;
 
         navTabs.classList.toggle("show", isOpen);
-        document.body.classList.toggle("menu-open", isOpen);
+       // document.body.classList.toggle("menu-open", isOpen);
     });
 
     navTabs.addEventListener("click", function (e) {
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener("click", function () {
         isOpen = false;
         navTabs.classList.remove("show");
-        document.body.classList.remove("menu-open");
+      //   document.body.classList.remove("menu-open");
     });
 
 });

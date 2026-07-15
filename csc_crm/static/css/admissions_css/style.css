@@ -8,68 +8,179 @@ body{
     font-family: Arial, Helvetica, sans-serif;
 }
 
-/* NAVBAR */
 
-.navbar{
-    background-color: rgb(30, 42, 120);
-    color: white;
 
+/* ==========================TOP NAVBAR======= */
+
+.top-navbar{
+
+    position:fixed;
+    top:0;
+    left:0;
+
+    width:100%;
+
+    height:54px;
+
+    background:#262170;
+
+    display:flex;
+    align-items:center;
+
+    padding:0 25px;
+
+    z-index:1000;
+
+}
+
+.nav-left{
+
+    display:flex;
+    align-items:center;
+    gap:20px;
+
+}
+
+.menu-btn{
+
+    background:none;
+    border:none;
+
+    color:#fff;
+
+    font-size:20px;
+
+    cursor:pointer;
+
+}
+
+.brand{
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+}
+
+.top-navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:54px;
+    background:#262170;
+    display:flex;
+    align-items:center;
+    padding:0 25px;
+    z-index:1000;
+}
+
+.nav-left{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.menu-btn{
+    background:none;
+    border:none;
+    color:#fff;
+    font-size:20px;
+    cursor:pointer;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo-box{
+    width:38px;
+    height:38px;
+    background:#FFE600;
+    color:#262170;
+    border-radius:8px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.brand-text h3{
+    color:#fff;
+    font-size:16px;
+    margin:0;
+}
+
+.brand-text small{
+    color:#d8d8d8;
+    font-size:11px;
+}
+
+
+/* -----------TOP WHITE TABS */
+
+.top-tabs{
+    position:fixed;
+    top:54px;
+    left:250px;
+    right:0;
+    height:46px;
+
+    display:flex;
+    align-items:center;
+    gap:28px;
+
+    padding:0 22px;
+
+    background:#fff;
+    border-bottom:1px solid #ddd;
+    z-index:999;
+}
+
+.top-tabs a{
+    display:flex;
+    align-items:center;
+
+    height:46px;
+
+    text-decoration:none;
+    color:#999ea8c6;
+
+    font-size:14px;
+    font-weight:600;
+
+    border-bottom:3px solid transparent;
+}
+
+.top-tabs a:hover{
+    color:#3f3f46db;
+}
+
+.top-tabs a.active{
+    color:#262170;
+    border-bottom:3px solid #262170;
+}
+
+
+/* LAYOUT */
+
+.main-wrapper{
+    margin-left: 250px;
+    width: calc(100% - 250px);
+    min-height: 100vh;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    padding: 15px 30px;
-
-    position: fixed;
-    top: 0;
-    width: 100%;
-
-    z-index: 1000;
+    flex-direction: column;
+    padding-top: 99px;
 }
 
-
-
-.logo{
-    font-size: 28px;
-    font-weight: bold;
-    color: rgb(255, 202, 43);
-    text-decoration: none;
+.page-content{
+    flex: 1;
+    padding: 20px;
+    background: #f5f6fb;
 }
-
-.logo:hover{
-    color:rgb(255, 202, 43) ;
-}
-
-/* NAV LINKS */
-
-
-.nav-links{
-    display: flex;
-    align-items: center;
-    gap: 25px;
-
-    list-style: none;
-}
-
-.nav-links li a{
-    text-decoration: none;
-    color: white;
-    font-size: 17px;
-
-    transition: 0.3s;
-}
-
-.nav-links li a:hover{
-    color: rgb(255, 202, 43);
-}
-
-.nav-links li a.active{
-    color: rgb(255, 202, 43);
-    font-weight: bold;
-    border-bottom: 2px solid rgb(255, 202, 43);
-    padding-bottom: 5px;
-}
-
 .fa-house{
     font-size: 22px;
 }
@@ -137,37 +248,68 @@ body{
 }
 /* MOBILE VIEW */
 
-@media (max-width: 768px){
+@media (max-width:768px){
 
-    .menu-toggle{
-        display: block;
+    /* Navbar */
+
+    .top-navbar{
+        height:64px;
+        padding:0 16px;
     }
 
-    .nav-links{
-        display: none;
-
-        flex-direction: column;
-
-        position: absolute;
-
-        top: 70px;
-        right: 0;
-
-        background-color: rgb(30, 42, 120);
-
-        width: 220px;
-
-        padding: 20px;
-
-        text-align: left;
+    .nav-left{
+        gap:12px;
     }
 
-    .nav-links.show{
-        display: flex;
+    .brand{
+        gap:10px;
     }
 
-    .navbar{
-        padding: 15px 20px;
+    .logo-box{
+        width:38px;
+        height:38px;
+        font-size:12px;
+    }
+
+    .brand-text h3{
+        font-size:15px;
+        white-space:nowrap;
+    }
+
+    .brand-text small{
+        font-size:10px;
+        white-space:nowrap;
+    }
+
+    /* Main */
+
+    .main-wrapper{
+        margin-left:0;
+        width:100%;
+        padding-top:109px;
+    }
+
+    /* Tabs */
+
+    .top-tabs{
+        left:0;
+        top:64px;
+        width:100%;
+        overflow-x:auto;
+        overflow-y:hidden;
+        white-space:nowrap;
+        gap:30px;
+        padding:0 18px;
+        scrollbar-width:none;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    .top-tabs::-webkit-scrollbar{
+        display:none;
+    }
+
+    .top-tabs a{
+        flex-shrink:0;
     }
 
 }

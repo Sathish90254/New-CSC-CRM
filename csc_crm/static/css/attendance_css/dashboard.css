@@ -1,9 +1,5 @@
-body {
-    background-color: whitesmoke;
-    color: rgb(30, 42, 120);
-    font-family: Segoe UI;
-    zoom: 90%;
-    padding-left: 20px;
+.dashboard-page{
+    background:whitesmoke;
 }
 
 /* Dashboard Heading */
@@ -59,11 +55,9 @@ body {
     }
 }
 
-.main-content {
-    margin-left: 250px;
-    padding: 15px 25px;
-    zoom: 0.9;
-    /* optional */
+.st-main-content{
+    margin-left:0;
+    padding:20px;
 }
 
 .topbar {
@@ -233,14 +227,16 @@ h3 {
     object-fit:cover;
 }
 
-
+.topbar,
+.dashboard-title,
+.batch-detail-card,
+.stats-grid{
+    width:100%;
+}
 /* Tablet View */
 @media (max-width: 1024px) {
 
-    .main-content {
-        margin-left: 0;
-        padding: 15px;
-    }
+   
 
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -281,11 +277,7 @@ h3 {
         zoom: 100%;
     }
 
-    .main-content {
-        margin-left: 0;
-        padding: 10px;
-        zoom: 1;
-    }
+    
 
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
