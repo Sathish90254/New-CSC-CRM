@@ -27,7 +27,19 @@ from .forms import *
 def staff_management(request):
     """Display all staff members with filters and role permissions matrix"""
 
-    queryset = Staff.objects.select_related('role', 'department').order_by('-created_at')
+    queryset = (
+        Staff.objects
+        .select_related('role', 'department')
+        .annotate(
+            leads_assigned=Count('leadcapture'),
+
+            closed_deals=Count(
+                'leadcapture',
+                filter=Q(leadcapture__initial_status='enrolled')
+            )
+        )
+        .order_by('-created_at')
+    )
 
     # Apply filters
     department = request.GET.get('department')
@@ -646,16 +658,12 @@ from datetime import datetime, time
 
 def auto_checkout_pending_attendance():
 
-    current_time = timezone.localtime()
-
-    if current_time.time() < time(19, 00):
-        return
-
-    
+    today = timezone.localdate()
 
     pending_attendance = Attendance.objects.filter(
         log_in__isnull=False,
-        log_out__isnull=True
+        log_out__isnull=True,
+        date__lt=today
     )
 
     for attendance in pending_attendance:
@@ -669,17 +677,14 @@ def auto_checkout_pending_attendance():
 
         attendance.log_out = auto_logout_time
 
-        worked_time = (
-            attendance.log_out -
-            attendance.log_in
-        )
+        worked_time = attendance.log_out - attendance.log_in
 
-        worked_hours = (
-            worked_time.total_seconds() / 3600
-        )
+        attendance.total_hours = worked_time
+
+        worked_hours = worked_time.total_seconds() / 3600
 
         if worked_hours < 4:
-            attendance.status = 'Absent'
+            attendance.status = "Absent"
 
         attendance.save()
 #======attendance=========
@@ -695,6 +700,24 @@ def attendance_page(request, id):
     today = timezone.localdate()
 
     today_attendance = Attendance.objects.filter(staff=staff,date=today ).first()
+    current_time = timezone.localtime(timezone.now())
+
+    is_checkout_closed = current_time.time() >= time(19, 0)
+
+    is_checkin_done = False
+    is_checkout_done = False
+    is_leave_or_absent = False
+
+    if today_attendance:
+
+        if today_attendance.log_in:
+            is_checkin_done = True
+
+        if today_attendance.log_out:
+            is_checkout_done = True
+
+        if today_attendance.status in ['Leave', 'Absent']:
+            is_leave_or_absent = True
 
     today_status = today_attendance.status if today_attendance else 'Absent'
     
@@ -735,6 +758,13 @@ def attendance_page(request, id):
         attendance_percentage = int(attendance_score / total_working_days * 100)
     else:
         attendance_percentage = 0
+    
+# ================= PAGINATION =================
+    paginator = Paginator(attendance_data, 6)
+
+    page_number = request.GET.get("page")
+
+    attendance_data = paginator.get_page(page_number)
 
     # ================= CONTEXT =================
     context = {
@@ -749,6 +779,20 @@ def attendance_page(request, id):
         'today_attendance': today_attendance,
         'show_checkout': show_checkout,
         'staff': staff,
+        'active_attendance': Attendance.objects.filter(
+        staff=staff,
+        log_in__isnull=False,
+        log_out__isnull=True
+        ).order_by('-id').first(),
+
+        'is_checkin_done': is_checkin_done,
+
+        'is_checkout_done': is_checkout_done,
+
+        'is_leave_or_absent': is_leave_or_absent,
+
+        'is_checkout_closed': is_checkout_closed,
+        
     }
 
     return render(request, 'staff/attendance.html', context)
@@ -894,6 +938,8 @@ def staff_checkin(request, id):
                 attendance.log_out = current_time
 
                 worked_time = attendance.log_out - attendance.log_in
+                
+                attendance.total_hours = worked_time
 
                 worked_hours = worked_time.total_seconds() / 3600
 

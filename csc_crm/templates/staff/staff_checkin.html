@@ -1,308 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Staff Attendance Entry</title>
-
-    <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
-}
-
-body{
-    background:#eef4ff;
-    padding:40px;
-}
-
-.container{
-
-    width:100%;
-    max-width:700px;
-
-    margin:auto;
-
-    background:white;
-
-    padding:35px;
-
-    border-radius:20px;
-
-    box-shadow:0 10px 30px rgba(37,99,235,0.15);
-}
-
-.title{
-
-   background:#043297;
-    color:white;
-    padding:15px;
-    border-radius:12px;
-    text-align:center;
-    margin-bottom:20px;
-    box-shadow:0 4px 12px rgba(37,99,235,0.2);
-}
-
-.input-group{
-    margin-bottom:20px;
-}
-
-.st-label{
-
-    display:block;
-
-    margin-bottom:8px;
-
-    font-weight:600;
-
-    color:#444;
-}
-
-.st-input{
-
-    width:100%;
-
-    padding:12px;
-
-    border:1px solid #d1d5db;
-
-    border-radius:10px;
-
-    outline:none;
-
-    font-size:15px;
-}
-
-.st-input:focus{
-
-    border-color:#779df0;
-
-    box-shadow:0 0 5px rgba(37,99,235,0.2);
-}
-
-.st-input[readonly]{
-
-    background:#f8fbff;
-
-    border:1px solid #8caef8;
-
-    font-weight:bold;
-
-    color:#052acf;
-}
-
-#currentDateTime,
-#liveTimer{
-
-    text-align:center;
-
-    font-size:18px;
-
-    padding:15px;
-}
-
-.btn-group{
-
-    display:flex;
-
-    gap:15px;
-
-    margin-top:20px;
-
-    flex-wrap:wrap;
-}
-
-.checkin-btn{
-
-    flex:1;
-
-    padding:14px;
-
-    border:none;
-
-    background:#16a34a;
-
-    color:white;
-
-    font-size:16px;
-
-    border-radius:10px;
-
-    cursor:pointer;
-
-    transition:0.3s ease;
-}
-
-.checkout-btn{
-
-    flex:1;
-
-    padding:14px;
-
-    border:none;
-
-    background:#dc2626;
-
-    color:white;
-
-    font-size:16px;
-
-    border-radius:10px;
-
-    cursor:pointer;
-
-    transition:0.3s ease;
-}
-
-.leave-btn{
-
-    flex:1;
-
-    padding:14px;
-
-    border:none;
-
-    background:#facc15;
-
-    color:#222;
-
-    font-size:16px;
-
-    border-radius:10px;
-
-    cursor:pointer;
-
-    transition:0.3s ease;
-}
-
-.absent-btn{
-
-    flex:1;
-
-    padding:14px;
-
-    border:none;
-
-    background:#ef4444;
-
-    color:white;
-
-    font-size:16px;
-
-    border-radius:10px;
-
-    cursor:pointer;
-
-    transition:0.3s ease;
-}
-
-/* Hover Effects */
-
-.checkin-btn:hover{
-
-    background:#b9ea5e;
-
-    transform:translateY(-3px);
-}
-
-.checkout-btn:hover{
-
-    background:#f17272;
-
-    transform:translateY(-3px);
-}
-
-.leave-btn:hover{
-
-    background:#d97706;
-
-    color:white;
-
-    transform:translateY(-3px);
-}
-
-.absent-btn:hover{
-
-    background:#991b1b;
-
-    transform:translateY(-3px);
-}
-
-/* Mobile Responsive */
-
-@media(max-width:768px){
-
-    .container{
-        padding:20px;
-    }
-
-    .btn-group{
-        flex-direction:column;
-    }
-
-    .checkin-btn,
-    .checkout-btn,
-    .leave-btn,
-    .absent-btn{
-
-        width:100%;
-    }
-}
-.alert-message{
-
-    background:#dcfce7;
-
-    color:#166534;
-
-    padding:12px;
-
-    border-radius:8px;
-
-    margin-bottom:15px;
-
-    text-align:center;
-
-    font-weight:600;
-
-    transition: opacity 0.5s ease;
-}
-
-button:disabled {
-    background-color: #bdbdbd !important;
-    color: #555 !important;
-    cursor: not-allowed !important;
-    opacity: 0.5;
-    filter: grayscale(100%);
-}
-
-.back-btn{
-    display:inline-block;
-    margin-bottom:15px;
-    padding:10px 16px;
-    background:#043297;
-    color:white;
-    text-decoration:none;
-    border-radius:8px;
-    font-weight:600;
-    transition:0.3s;
-}
-
-.back-btn:hover{
-    background:#ecec14;
-    color:rgb(23, 6, 150);
-}
-</style>
-
-</head>
-
-<body>
 
 {% if messages %}
     {% for message in messages %}
@@ -311,53 +6,75 @@ button:disabled {
         </div>
     {% endfor %}
 {% endif %}
-<div class="container">
+<div class="staff-container">
 
-   
-    <div class="title-header">
-    <a href="{% url 'attendance' staff.id %}" class="back-btn"> ← Back</a>
+   <div class="checkin-header">
 
-    <h1 class="title">Staff Attendance</h1>
+    <div class="checkin-icon">
+        <i class="fa-regular fa-calendar-check"></i>
     </div>
-    
 
-    <form method="POST">
+    <h1 class="title">Staff Check-In</h1>
+
+    <p class="sub-title">
+        Mark your attendance for today
+    </p>
+
+</div>
+
+    <form method="POST"  action="{% url 'staff_checkin' staff.id %}">
 
         {% csrf_token %}
+<div class="info-card">
 
-        <div class="input-group">
+    <div class="info-icon purple">
+        <i class="fa-regular fa-id-card"></i>
+    </div>
 
-    <label class="st-label">Employee ID</label>
-
-    <input type="text" value="{{ staff.employee_id }}" class="st-input" readonly>
-
-</div>
-
-<div class="input-group">
-
-    <label class="st-label">Staff Name</label>
-
-    <input type="text" value="{{ staff.first_name }} {{ staff.last_name }}" class="st-input" readonly>
+    <div class="info-text">
+        <small>Employee ID</small>
+        <strong>{{ staff.employee_id }}</strong>
+    </div>
 
 </div>
 
-        <div class="input-group">
+<div class="info-card">
 
-            <label class="st-label">Today's Date & Time</label>
+    <div class="info-icon blue">
+        <i class="fa-regular fa-user"></i>
+    </div>
 
-            <input type="text" id="currentDateTime" class="st-input" readonly>
+    <div class="info-text">
+        <small>Staff Name</small>
+        <strong>{{ staff.first_name }} {{ staff.last_name }}</strong>
+    </div>
 
-        </div>
+</div>
 
-        <div class="input-group">
+<div class="info-card">
 
-            <label class="st-label">
-                ⏱ Working Timer
-            </label>
+    <div class="info-icon yellow">
+        <i class="fa-regular fa-calendar-days"></i>
+    </div>
 
-            <input type="text" id="liveTimer" class="st-input" value="00:00:00" readonly>
+    <div class="info-text">
+        <small>Today's Date & Time</small>
+        <strong id="currentDateTimeText"></strong>
+    </div>
 
-        </div>
+</div>
+<div class="info-card">
+
+    <div class="info-icon green">
+        <i class="fa-regular fa-clock"></i>
+    </div>
+
+    <div class="info-text">
+        <small>Working Timer</small>
+        <strong id="liveTimerText">00:00:00</strong>
+    </div>
+
+</div>
 
         <div class="btn-group" disabled class="disabled-btn">
 
@@ -368,7 +85,8 @@ button:disabled {
                 class="checkin-btn"
                 {% if is_checkin_done or is_leave_or_absent %}disabled{% endif %}>
 
-                Check-In
+                <i class="fa-solid fa-right-to-bracket"></i>
+                <span>Check-In</span>
 
             </button>
 
@@ -379,7 +97,8 @@ button:disabled {
                 class="checkout-btn"
                 {% if not is_checkin_done or is_checkout_done or is_leave_or_absent or is_checkout_closed %}disabled{% endif %} >
                 
-                Check-Out
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Check-Out</span>
 
             </button>
 
@@ -392,7 +111,8 @@ button:disabled {
                 onclick="return confirmLeave();"
                 {% if is_checkin_done or is_leave_or_absent %}disabled{% endif %} >
 
-                Leave
+                <i class="fa-regular fa-calendar-minus"></i>
+                <span>Leave</span>
 
             </button>
 
@@ -405,7 +125,8 @@ button:disabled {
                 onclick="return confirmLeave();"
                 {% if is_checkin_done or is_leave_or_absent %}disabled{% endif %}>
 
-                Absent
+                <i class="fa-solid fa-user-xmark"></i>
+                <span>Absent</span>
 
             </button>
 
@@ -416,23 +137,17 @@ button:disabled {
 </div>
 
 <script>
-
 function updateDateTime(){
 
     let now = new Date();
 
-    document.getElementById(
-        "currentDateTime"
-    ).value = now.toLocaleString();
+    document.getElementById("currentDateTimeText").textContent =
+        now.toLocaleString();
 
 }
+
 updateDateTime();
-
-setInterval(
-    updateDateTime,
-    1000
-);
-
+setInterval(updateDateTime,1000);
 
 </script>
 
@@ -460,9 +175,7 @@ function updateTimer(){
 
     let secs = diff % 60;
 
-    document.getElementById(
-        "liveTimer"
-    ).value =
+    document.getElementById("liveTimerText").textContent =
 
         String(hrs).padStart(2,'0')
         + ":"
@@ -521,5 +234,3 @@ function confirmAbsent() {
 }
 
 </script>
-</body>
-</html>

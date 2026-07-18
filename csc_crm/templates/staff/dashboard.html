@@ -107,7 +107,7 @@
             <div class="dash-donut-row">
 
                 <div class="dash-donut" style="--donut-gradient: conic-gradient(
-                        #22c55e 0deg {{ new_leads_deg|default:0 }}deg,
+                        #fffb11 0deg {{ new_leads_deg|default:0 }}deg,
                         #f59e0b {{ new_leads_deg|default:0 }}deg {{ contacted_leads_deg|default:0 }}deg,
                         #8b5cf6 {{ contacted_leads_deg|default:0 }}deg {{ interested_leads_deg|default:0 }}deg,
                         #06b6d4 {{ interested_leads_deg|default:0 }}deg {{ demo_leads_deg|default:0 }}deg,
@@ -121,7 +121,7 @@
                 </div>
 
                 <ul class="dash-legend">
-                    <li><i class="dash-dot" style="background:#22c55e;"></i>New <b>{{ new_leads }}</b> <small>({{ new_leads_pct|default:0 }}%)</small></li>
+                    <li><i class="dash-dot" style="background:#fffb11;"></i>New <b>{{ new_leads }}</b> <small>({{ new_leads_pct|default:0 }}%)</small></li>
                     <li><i class="dash-dot" style="background:#f59e0b;"></i>Contacted <b>{{ contacted_leads }}</b><small>({{ contacted_leads_pct|default:0 }}%)</small></li>
                     <li><i class="dash-dot" style="background:#8b5cf6;"></i>Interested <b>{{ interested_leads }}</b><small>({{ interested_leads_pct|default:0 }}%)</small></li>
                     <li><i class="dash-dot" style="background:#06b6d4;"></i>Demo Scheduled <b>{{ demo_leads }}</b><small>({{ demo_leads_pct|default:0 }}%)</small></li>
