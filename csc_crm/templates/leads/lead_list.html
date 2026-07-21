@@ -1,171 +1,227 @@
 {% extends 'leads/base.html' %}
-
-
 {% block content %}
+
 <section class="leads-page">
-    
+    <!-- ================== PAGE HEADER/BANNER ===================== -->
 
-     <!-- Page Header -->  
-      <section class="page-header">
-         <div class="header-left">
-            <h1 class="page-title">Lead Management</h1>
-            <p class="page-subtitle">Manage enquiries, follow-ups and conversions</p>
-         </div>
+    <section class="page-header">
+        <div class="header-icon-box">
+            <i class="fa-solid fa-users"></i>
+        </div>
+        <div class="header-left">
+            <h1 class="leads-page-title">Lead Management</h1>
+            <p class="leads-page-subtitle">Manage enquiries, follow-ups and conversions</p>
+        </div>
+        <div class="header-illustration" aria-hidden="true">
+            <span class="floating-icon icon-1">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.6"/><path d="M5 20c0-3 3-5 7-5s7 2 7 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </span>
+            <span class="floating-icon icon-2">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.6"/><path d="M5 20c0-3 3-5 7-5s7 2 7 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </span>
+            <span class="floating-icon icon-3">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.6"/><path d="M5 20c0-3 3-5 7-5s7 2 7 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </span>
+            <span class="floating-icon icon-4">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l1.6 4.9 5.1.1-4.1 3 1.6 4.9-4.2-3-4.2 3 1.6-4.9-4.1-3 5.1-.1z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="funnel-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 5h16l-6 8v6l-4 2v-8L4 5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8.5" cy="11" r="1.8" stroke="currentColor" stroke-width="1.4"/><path d="M13 10h6M13 14h6M6 15h5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            </span>
+        </div>
+    </section>
 
-      </section>
+    <!-- ========================== LEAD FORM ========================== -->
+     <section class="lead-form-section">
+        <div class="lead-form-card">
 
-      <!-- Lead Forms -->
-      <section class="lead-form-section">
-
-         <div class="form-card">
-
-            <!-- Header -->
+            <!-- ======================= FORM HEADER ======================== -->
             <div class="form-header">
-
-               <div class="header-icon">+</div>
-               <div class="header-content">
-                  <h1 class="form-title">{{ page_title }}</h1>
-                  <p class="form-subtitle">Capture enquiry with contact details & course interest</p>
-               </div>
-
+                <div class="header-icon">
+                    <i class="fa-solid fa-users-line"></i>
+                </div>
+                <div class="header-content">
+                    <h1 class="form-title">{{ page_title }}</h1>
+                    <p class="form-subtitle">Capture enquiry with contact details &amp; course interest</p>
+                </div>
             </div>
 
-            <!-- Form -->
-             <form action="{% if lead %}{% url 'leads:lead_capture_update' lead.id %}{% else %}{% url 'leads:lead_capture_create' %}{% endif %}" id="leadForm" method="POST" class="lead-form">
+            <form action="{% if lead %} {% url 'leads:lead_capture_update' lead.id %} {% else %} {% url 'leads:lead_capture_create' %} {% endif %}"
+                  id="leadForm" method="POST" class="lead-form">
 
-               {% csrf_token %}
+                {% csrf_token %}
 
-               {% if lead %}
-                  <input type="hidden" id="leadId" value="{{ lead.id }}">
-               {% endif %}
+                {% if lead %}
+                    <input type="hidden" id="leadId" value="{{ lead.id }}">
+                {% endif %}
 
-               <!-- ROW-1 -->
-
-               <div class="form-row">
-
-                  <div class="form-group">
-                     <label class="form-label">Lead Name</label>
-                     {{ form.lead_name }}
+                <!-- ============================= SECTION / CONTACT INFO ============================= -->
+                 <div class="form-section-header">
+                    <span class="section-bar"></span>
+                    <i class="fa-regular fa-address-card"></i>
+                    <h3 class="section-title">Contact Information</h3>
+                 </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Lead Name <span class="required">*</span></label>
+                        <div class="input-wrapper">
+                            <i class="fa-regular fa-user"></i>
+                            {{ form.lead_name }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone Number <span class="required">*</span></label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-phone"></i>
+                            {{ form.phone_no }}
+                        </div>
+                        <span id="phoneError" class="field-error"></span>
+                        <small id="phone-error" class="field-error"></small>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email <span class="required">*</span></label>
+                        <div class="input-wrapper">
+                            <i class="fa-regular fa-envelope"></i>
+                            {{ form.email }}
+                        </div>
+                        <span id="emailError" class="field-error"></span>
+                        <small id="email-error" class="field-error"></small>
+                    </div>
                   </div>
 
-                  <div class="form-group">
-                     <label class="form-label">Phone Number</label>
-                     {{ form.phone_no }}
-                     <span id="phoneError" style="color:red;"></span>
-                     <small id="phone-error" style="color:red;"></small>
+                <!-- ========================= SECTION: LEAD DETAILS ========================= -->
+                <div class="form-section-header">
+                    <span class="section-bar"></span>
+                    <i class="fa-regular fa-address-card"></i>
+                    <h3 class="section-title">Lead Details</h3>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Course Interested <span class="required">*</span></label>
+                        <div class="input-wrapper select-wrapper">
+                            {{ form.course_interested }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Lead Source <span class="required">*</span></label>
+                        <div class="input-wrapper select-wrapper">
+                            {{ form.lead_source }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Enquiry Date <span class="required">*</span></label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-calendar-check"></i>
+                            {{ form.enquiry_date }}
+                            <i class="fa-regular fa-calendar-days"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- =============================== INITIAL_NOTES =============================== -->
+                 <div class="form-row">
+                    <div class="form-group full-width">
+                        <label class="form-label notes-label">
+                            <i class="fa-solid fa-pen-nib"></i>
+                            Initial Notes (Optional)
+                        </label>
+                        {{ form.initial_notes }}
+                    </div>
+                 </div>
+
+                 <!-- ============================ SECTION FOLLOW-UP & ASSIGNMENT ============================ -->
+                  <div class="form-section-header">
+                    <span class="section-bar"></span>
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <h3 class="section-title">Follow-Up &amp; Assignment</h3>
                   </div>
 
-                  <div class="form-group">
-                     <label class="form-label">Email</label>
-                     {{ form.email }}
-                     <span id="emailError" style="color:red;" class="error-message"></span>
-                     <small id="email-error" style="color:red;"></small>
+                  <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Assigned To</label>
+                        <div class="input-wrapper select-wrapper">
+                            {{ form.assigned_to }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Next Follow-Up Date</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-calendar-check"></i>
+                            {{ form.next_followup_date }}
+                            <i class="fa-regular fa-calendar-days"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Initial Status</label>
+                        <div class="input-wrapper">
+                            {{ form.initial_status }}
+                        </div>
+                    </div>
                   </div>
 
-               </div>
+                  <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="clearForm()">
+                        <i class="fa-solid fa-x"></i>
+                        Clear Form
+                    </button>
+                    <button type="submit" class="btn-submit" id="submit-btn">
+                        <i class="fa-solid fa-check"></i>
+                        Save Lead
+                    </button>
+                    </div>
+            </form>
+        </div>
+     </section>
 
-               <!-- ROW-2 -->
-               <div class="form-row">
-
-                   <div class="form-group">
-                     <label class="form-label">Course Interested</label>
-                     {{ form.course_interested }}
-                  </div>
-
-                  <div class="form-group">
-                     <label class="form-label">Lead Source</label>
-                     {{ form.lead_source }}
-                  </div>
-
-                  <div class="form-group">
-                     <label class="form-label">Enquiry Date</label>
-                     {{ form.enquiry_date }}
-                  </div>
-
-               </div>
-
-               <!-- NOTES -->
-               <div class="form-row">
-                  <div class="form-group full-width">
-                     <label class="form-label">Initial Notes (Optional)</label>
-                     {{ form.initial_notes }}
-                  </div>
-               </div>
-
-                <!-- ROW 3 -->
-               <div class="form-row">
-
-                  <div class="form-group">
-                     <label class="form-label">Assign To</label>
-                     {{ form.assigned_to }}
-                  </div>
-
-                  <div class="form-group">
-                     <label class="form-label">Next Follow-Up Date</label>
-                     {{ form.next_followup_date }}
-                  </div>
-
-                  <div class="form-group">
-                     <label class="form-label">Initial Status</label>
-                     {{ form.initial_status }}
-                  </div>
-
-               </div>
-
-               <div class="form-actions">
-                  <button type="button" class="btn-cancel" onclick="clearForm()">Clear</button>
-                  <button type="submit" class="btn-submit" id="submit-btn">Save Lead</button>
-               </div>
-
-             </form>
-
-         </div>
-
-      </section>
-
-      <!-- Recent Leads -->
+     <!-- ============================= RECENT LEADS ============================= -->
       <section class="recent-leads-section">
-         <div class="content-card">
+        <div class="content-card">
             <div class="card-header">
-               <h2 class="card-title">Recent Leads Today</h2>
+                <div class="card-header-left">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <h2 class="card-title">Recent Leads Today</h2>
+                </div>
+                <a href="#" class="btn-view-all">View All <i class="fa-solid fa-arrow-right"></i></a>
             </div>
 
             <div class="table-wrapper">
-               <table class="data-table">
-                  <thead>
-                     <tr>
-                        <th>Lead ID</th>
-                        <th>Name</th>
-                        <th>Phone</th>
-                        <th>Course</th>
-                        <th>Status</th>
-                        <th>Follow-Up</th>
-                     </tr>
-                  </thead>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Lead ID</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Course</th>
+                            <th>Status</th>
+                            <th>Follow-Up</th>
+                        </tr>
+                    </thead>
 
-                  <tbody>
-                     {% for lead in recent_leads %}
-                     <tr>
-                        <td>{{ lead.lead_id }}</td>
-                        <td>{{ lead.lead_name }}</td>
-                        <td>{{ lead.phone_no }}</td>
-                        <td>{{ lead.course_interested }}</td>
-                        <td>{{ lead.initial_status|title }}</td>
-                        <td>{{ lead.next_followup_date }}</td>
-                     </tr>
-                     {% empty %}
-                     <tr>
-                        <td colspan="6"> No Leads Today </td>
-                     </tr>
-                     {% endfor %}
-
-                  </tbody>
-
-               </table>
-
+                    <tbody>
+                        {% for lead in recent_leads %}
+                        <tr>
+                            <td>{{ lead.lead_id }}</td>
+                            <td>{{ lead.lead_name }}</td>
+                            <td>{{ lead.phone_no }}</td>
+                            <td>{{ lead.course_interested }}</td>
+                            <td><span class="status-pill">{{ lead.initial_status|title }}</span></td>
+                            <td>{{ lead.next_followup_date }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="empty-message">No Leads Today</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-         </div>
+        </div>
       </section>
 
 </section>
+
 {% endblock %}
