@@ -413,3 +413,16 @@ def delete_call_log(request, id):
     log.delete()
     messages.success(request, f'Call-Log Deleted!')
     return redirect('leads:call_logs')
+
+def call_history(request):
+    outcome = request.GET.get("outcome")
+
+    logs = CallLog.objects.all().order_by("-call_date", "-call_time")
+
+    if outcome and outcome != "All":
+        logs = logs.filter(call_outcome=outcome)
+
+    return render(request, "leads/call_history.html", {
+        "logs": logs,
+        "selected": outcome or "All"
+    })
